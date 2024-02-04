@@ -24,9 +24,6 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_order")
 public class Order implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -51,10 +48,9 @@ public class Order implements Serializable {
 	public Order() {
 	}
 
-	public Order(Long id, Instant moment, OrderStatus orderStatus, User client) {
-		this.id = id;
-		this.moment = moment;
-		this.setOrderStatus(orderStatus);
+	public Order(User client) {
+		this.moment = Instant.now();
+		this.setOrderStatus(OrderStatus.WAITING_PAYMENT);
 		this.client = client;
 	}
 
@@ -62,16 +58,8 @@ public class Order implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Instant getMoment() {
 		return moment;
-	}
-
-	public void setMoment(Instant moment) {
-		this.moment = moment;
 	}
 
 	public OrderStatus getOrderStatus() {
