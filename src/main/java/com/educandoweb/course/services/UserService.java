@@ -31,7 +31,7 @@ public class UserService {
 		return repository.save(user);
 	}
 	
-	public void delete(Long id) {
+	public void remove(Long id) {
 		try {
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {

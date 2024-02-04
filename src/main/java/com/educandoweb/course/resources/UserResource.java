@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -19,38 +20,39 @@ import com.educandoweb.course.services.UserService;
 import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 @RestController
+@RequestMapping("/users")
 public class UserResource {
 	
 	@Autowired
 	private UserService service;
 	
-	@GetMapping(value = "/users")
-	public ResponseEntity<List<User>> findAll(){
+	@GetMapping
+	public ResponseEntity<List<User>> getAll(){
 		List<User> list = service.findAll();
 		return ResponseEntity.ok().body(list);
 	}
 	
-	@GetMapping(value = "/user/{id}")
-	public ResponseEntity<User> findById(@PathVariable Long id){
+	@GetMapping(value = "/{id}")
+	public ResponseEntity<User> getById(@PathVariable Long id){
 		User obj = service.findById(id);
 		return ResponseEntity.ok().body(obj);
 	}
 	
-	@PostMapping("/user")
-	public ResponseEntity<User> insert(@RequestBody User userBody){
+	@PostMapping
+	public ResponseEntity<User> postUser(@RequestBody User userBody){
 		User user = service.insert(userBody);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(location).body(user);
 	}
 	
-	@DeleteMapping("user/{id}")
-	public ResponseEntity<Empty> delete(@PathVariable Long id){
-		service.delete(id);
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> deleteUser(@PathVariable Long id){
+		service.remove(id);
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PutMapping("user/{id}")
-	public ResponseEntity<User> update(@PathVariable Long id, @RequestBody User userBody){
+	@PutMapping("/{id}")
+	public ResponseEntity<User> putUser(@PathVariable Long id, @RequestBody User userBody){
 		User userResponse = service.update(id, userBody);
 		return ResponseEntity.ok().body(userResponse);
 	}
