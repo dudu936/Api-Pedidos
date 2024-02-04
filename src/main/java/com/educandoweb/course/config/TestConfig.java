@@ -39,6 +39,7 @@ public class TestConfig implements CommandLineRunner {
 		Category cat1 = new Category("Electronics");
 		Category cat2 = new Category("Books");
 		Category cat3 = new Category("Computers");
+		
 		categoryRepository.saveAll(Arrays.asList(cat1, cat2, cat3));
 		
 		Product p1 = new Product("The Lord of the Rings", "Lorem ipsum dolor sit amet, consectetur.", 90.5, "", cat2);

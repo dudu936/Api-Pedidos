@@ -17,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.educandoweb.course.entities.User;
 import com.educandoweb.course.services.UserService;
-import com.fasterxml.jackson.databind.introspect.TypeResolutionContext.Empty;
 
 @RestController
 @RequestMapping("/users")
@@ -39,20 +38,20 @@ public class UserResource {
 	}
 	
 	@PostMapping
-	public ResponseEntity<User> postUser(@RequestBody User userBody){
+	public ResponseEntity<User> post(@RequestBody User userBody){
 		User user = service.insert(userBody);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(user.getId()).toUri();
 		return ResponseEntity.created(location).body(user);
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<?> deleteUser(@PathVariable Long id){
+	public ResponseEntity<?> delete(@PathVariable Long id){
 		service.remove(id);
 		return ResponseEntity.noContent().build();
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<User> putUser(@PathVariable Long id, @RequestBody User userBody){
+	public ResponseEntity<User> put(@PathVariable Long id, @RequestBody User userBody){
 		User userResponse = service.update(id, userBody);
 		return ResponseEntity.ok().body(userResponse);
 	}

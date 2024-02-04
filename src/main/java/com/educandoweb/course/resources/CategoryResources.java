@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,10 +36,16 @@ public class CategoryResources {
 	}
 	
 	@PostMapping
-	public ResponseEntity<Category> postCategory(@RequestBody Category categoryRequest){
+	public ResponseEntity<Category> post(@RequestBody Category categoryRequest){
 		Category category = service.insert(categoryRequest);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(category.getId()).toUri();
 		return ResponseEntity.created(location).body(category);
+	}
+	
+	@DeleteMapping("/{id}")
+	public ResponseEntity<?> delete(@PathVariable Long id){
+		service.remove(id);
+		return ResponseEntity.noContent().build();
 	}
 
 }
