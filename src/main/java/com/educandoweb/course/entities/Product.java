@@ -20,15 +20,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_product")
 public class Product implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private String name;
 	private String description;
 	private Double price;
@@ -44,21 +41,16 @@ public class Product implements Serializable {
 	public Product() {
 	}
 
-	public Product(Long id, String name, String description, Double price, String imgUrl) {
-		super();
-		this.id = id;
+	public Product(String name, String description, Double price, String imgUrl, Category... categories) {
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
+		this.addCategory(categories);
 	}
 
 	public Long getId() {
 		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
 	}
 
 	public String getName() {
@@ -104,6 +96,12 @@ public class Product implements Serializable {
 			orders.add(order.getOrder());
 		}
 		return orders;
+	}
+	
+	private void addCategory(Category... categories) {
+		for(Category category: categories) {
+			this.categories.add(category);
+		}
 	}
 
 	@Override

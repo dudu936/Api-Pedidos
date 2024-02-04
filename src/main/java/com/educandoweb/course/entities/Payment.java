@@ -33,8 +33,8 @@ public class Payment implements Serializable {
 	public Payment() {
 	}
 
-	public Payment(Instant moment, Order order) {
-		this.moment = moment;
+	public Payment(Order order) {
+		this.moment = Instant.now();
 		this.order = order;
 	}
 
