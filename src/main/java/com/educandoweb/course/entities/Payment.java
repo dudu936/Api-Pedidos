@@ -17,15 +17,12 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "tb_payment")
 public class Payment implements Serializable {
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
 	private Instant moment;
 
 	@OneToOne
@@ -36,9 +33,7 @@ public class Payment implements Serializable {
 	public Payment() {
 	}
 
-	public Payment(Long id, Instant moment, Order order) {
-		super();
-		this.id = id;
+	public Payment(Instant moment, Order order) {
 		this.moment = moment;
 		this.order = order;
 	}
@@ -47,24 +42,12 @@ public class Payment implements Serializable {
 		return id;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
-	}
-
 	public Instant getMoment() {
 		return moment;
 	}
 
-	public void setMoment(Instant moment) {
-		this.moment = moment;
-	}
-
 	public Order getOrder() {
 		return order;
-	}
-
-	public void setOrder(Order order) {
-		this.order = order;
 	}
 
 	@Override
