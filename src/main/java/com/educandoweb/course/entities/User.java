@@ -13,6 +13,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tb_user")
@@ -22,14 +25,17 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+	@NotEmpty
 	private String name;
+	@Email
 	private String email;
+	@NotEmpty
+	@Size(min=11, max=11)
 	private String phone;
-	
-	@JsonIgnore
+	@NotEmpty
+	@Size(min=4, max=16)
 	private String password;
-
+	
 	@OneToMany(mappedBy = "client")
 	@JsonIgnore
 	private List<Order> orders = new ArrayList<>();
@@ -71,7 +77,7 @@ public class User implements Serializable {
 	public void setPhone(String phone) {
 		this.phone = phone;
 	}
-
+	
 	public String getPassword() {
 		return password;
 	}

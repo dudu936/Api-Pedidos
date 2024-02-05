@@ -16,6 +16,8 @@ import jakarta.persistence.JoinTable;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_product")
@@ -26,11 +28,14 @@ public class Product implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	@NotEmpty
 	private String name;
+	@NotEmpty
 	private String description;
+	@NotNull
 	private Double price;
 	private String imgUrl;
-
+	
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
