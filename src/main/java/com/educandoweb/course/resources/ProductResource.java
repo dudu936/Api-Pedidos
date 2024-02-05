@@ -16,6 +16,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.services.ProductService;
+import org.springframework.web.bind.annotation.PutMapping;
+
 
 @RestController
 @RequestMapping(value = "/products")
@@ -47,6 +49,12 @@ public class ProductResource {
 	public ResponseEntity<?> delete(@PathVariable Long id){
 		service.remove(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@PutMapping("/{id}")
+	public ResponseEntity<Product> put(@PathVariable Long id, @RequestBody Product productRequest) {
+		Product product = service.update(id, productRequest);
+		return ResponseEntity.ok().body(product);
 	}
 	
 	
