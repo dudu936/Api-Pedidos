@@ -4,15 +4,18 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
 import com.educandoweb.course.services.exeptions.ConstraintException;
+import com.educandoweb.course.services.exeptions.DatabaseException;
 import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 import com.educandoweb.course.services.validate.ProductValidate;
 
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @Service
@@ -49,13 +52,21 @@ public class ProductService {
 	}
 	
 	public void remove(Long id) {
-		repository.deleteById(id);
+		try {
+			repository.deleteById(id);
+		} catch (DataIntegrityViolationException e) {
+			throw new DatabaseException(e.getMessage());
+		}
 	}
 	
 	public Product update(Long id, Product product) {
-		Product entity = repository.getReferenceById(id);
-		entity = updateProduct(entity, product);
-		return repository.save(entity);
+		try {
+			Product entity = repository.getReferenceById(id);
+			entity = updateProduct(entity, product);
+			return repository.save(entity); 
+		}catch(EntityNotFoundException e) {
+			throw new ResourceNotFoundExeption(id);
+		}
 	}
 
 	private Product updateProduct(Product entity, Product product) {
