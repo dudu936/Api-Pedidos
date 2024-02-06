@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
+import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 import com.educandoweb.course.services.validate.ProductValidate;
 
 @Service
@@ -27,7 +28,7 @@ public class ProductService {
 	
 	public Product findById(Long id){
 		Optional<Product> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundExeption(id));
 	}
 	
 	public Product insert(Product product){
@@ -57,7 +58,8 @@ public class ProductService {
 	}
 	
 	private Product addCategories(Product product) {
-		Product entity = new Product.Builder().id(product.getId())
+		Product entity = new Product.Builder()
+				.id(product.getId())
 				.name(product.getName())
 				.description(product.getDescription())
 				.price(product.getPrice())

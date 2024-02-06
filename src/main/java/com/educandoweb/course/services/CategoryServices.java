@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.repositories.CategoryRepository;
+import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 
 @Service
 public class CategoryServices {
@@ -21,7 +22,7 @@ public class CategoryServices {
 	
 	public Category findById(Long id) {
 		Optional<Category> obj = repository.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundExeption(id));
 	}
 	
 	public Category insert(Category category) {

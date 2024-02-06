@@ -1,9 +1,7 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -40,7 +38,7 @@ public class Product implements Serializable {
 	
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private List<Category> categories = new ArrayList<>();
+	private Set<Category> categories = new HashSet<>();
 	
 	@OneToMany(mappedBy = "id.product")
 	private Set<OrderItem> orders = new HashSet<>();
@@ -102,7 +100,7 @@ public class Product implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public List<Category> getCategories() {
+	public Set<Category> getCategories() {
 		return categories;
 	}
 	
@@ -116,6 +114,9 @@ public class Product implements Serializable {
 	}
 	
 	public void addCategory(Category... categories) {
+		if(categories.length == 1) {
+			this.categories.add(categories[0]);
+		}
 		for(Category category: categories) {
 			this.categories.add(category);
 		}
@@ -144,7 +145,7 @@ public class Product implements Serializable {
 		private String description;
 		private Double price;
 		private String imgUrl;
-		private List<Category> categories = new ArrayList<>();
+		private Set<Category> categories = new HashSet<>();
 		private Set<OrderItem> orders = new HashSet<>();
 		
 		public Builder id(Long id) {
@@ -172,7 +173,7 @@ public class Product implements Serializable {
 			return this;
 		}
 		
-		public Builder categories(List<Category> categories) {
+		public Builder categories(Set<Category> categories) {
 			this.categories = categories;
 			return this;
 		}
