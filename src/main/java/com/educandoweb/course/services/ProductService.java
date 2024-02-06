@@ -9,8 +9,11 @@ import org.springframework.stereotype.Service;
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
+import com.educandoweb.course.services.exeptions.ConstraintException;
 import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 import com.educandoweb.course.services.validate.ProductValidate;
+
+import jakarta.validation.ConstraintViolationException;
 
 @Service
 public class ProductService {
@@ -32,11 +35,17 @@ public class ProductService {
 	}
 	
 	public Product insert(Product product){
-		if(validate.categoryIsValid(product)) {
-			Product entity = addCategories(product);
-			return repository.save(entity);
+		try {
+			if(validate.categoryIsValid(product)) {
+				Product entity = addCategories(product);
+				return repository.save(entity);
+			}
+			else {
+				throw new ConstraintException("There are categories that do not exist.");
+			}
+		}catch(ConstraintViolationException e) {
+			throw new ConstraintException(e.getMessage());
 		}
-		return null;
 	}
 	
 	public void remove(Long id) {

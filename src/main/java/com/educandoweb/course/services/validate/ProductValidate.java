@@ -20,7 +20,7 @@ public class ProductValidate {
 		product.getCategories().forEach(category -> listId.add(category.getId()));
 		if(listId.isEmpty()) return false;
 		for(Long id: listId) {
-			if(!categoryRepository.existsById(id)) return false;
+			if(!categoryRepository.existsById(id)) return null;
 		}
 		return true;
 	}
