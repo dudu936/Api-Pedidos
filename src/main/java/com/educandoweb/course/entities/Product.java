@@ -1,7 +1,9 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -38,7 +40,7 @@ public class Product implements Serializable {
 	
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
-	private Set<Category> categories = new HashSet<>();
+	private List<Category> categories = new ArrayList<>();
 	
 	@OneToMany(mappedBy = "id.product")
 	private Set<OrderItem> orders = new HashSet<>();
@@ -52,6 +54,16 @@ public class Product implements Serializable {
 		this.price = price;
 		this.imgUrl = imgUrl;
 		this.addCategory(categories);
+	}
+	
+	private Product(Builder builder) {
+		this.id = builder.id;
+		this.name = builder.name;
+		this.description = builder.description;
+		this.price = builder.price;
+		this.imgUrl = builder.imgUrl;
+		this.categories = builder.categories;
+		this.orders = builder.orders;
 	}
 
 	public Long getId() {
@@ -90,7 +102,7 @@ public class Product implements Serializable {
 		this.imgUrl = imgUrl;
 	}
 
-	public Set<Category> getCategories() {
+	public List<Category> getCategories() {
 		return categories;
 	}
 	
@@ -103,7 +115,7 @@ public class Product implements Serializable {
 		return orders;
 	}
 	
-	private void addCategory(Category... categories) {
+	public void addCategory(Category... categories) {
 		for(Category category: categories) {
 			this.categories.add(category);
 		}
@@ -124,6 +136,56 @@ public class Product implements Serializable {
 			return false;
 		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
+	}
+	
+	public static class Builder {
+		private Long id;
+		private String name;
+		private String description;
+		private Double price;
+		private String imgUrl;
+		private List<Category> categories = new ArrayList<>();
+		private Set<OrderItem> orders = new HashSet<>();
+		
+		public Builder id(Long id) {
+			this.id = id;
+			return this;
+		}
+		
+		public Builder name(String name) {
+			this.name = name;
+			return this;
+		}
+		
+		public Builder description(String description) {
+			this.description = description;
+			return this;
+		}
+		
+		public Builder price(Double price) {
+			this.price = price;
+			return this;
+		}
+		
+		public Builder imgUrl(String imgUrl) {
+			this.imgUrl = imgUrl;
+			return this;
+		}
+		
+		public Builder categories(List<Category> categories) {
+			this.categories = categories;
+			return this;
+		}
+		
+		public Builder orders(Set<OrderItem> orders) {
+			this.orders = orders;
+			return this;
+		}
+		
+		public Product Build() {
+			return new Product(this);
+		}
+
 	}
 
 }
