@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionSystemException;
 
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Product;
@@ -47,7 +48,7 @@ public class ProductService {
 				throw new ConstraintException("There are categories that do not exist.");
 			}
 		}catch(ConstraintViolationException e) {
-			throw new ConstraintException(e.getMessage());
+			throw new ConstraintException("Required parameters are missing {name, description, price}");
 		}
 	}
 	
@@ -55,7 +56,7 @@ public class ProductService {
 		try {
 			repository.deleteById(id);
 		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException(e.getMessage());
+			throw new DatabaseException("Cannot remove used data.");
 		}
 	}
 	
@@ -66,6 +67,10 @@ public class ProductService {
 			return repository.save(entity); 
 		}catch(EntityNotFoundException e) {
 			throw new ResourceNotFoundExeption(id);
+			
+		}catch(TransactionSystemException e) {
+			throw new ConstraintException("Required parameters are missing {name, description, price}");
+			
 		}
 	}
 
