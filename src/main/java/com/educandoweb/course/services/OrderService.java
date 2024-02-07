@@ -13,4 +13,10 @@ public class OrderService extends DataService<Order, Long> {
 
 	}
 
+	@Override
+	public Order update(Long id, Order entity) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

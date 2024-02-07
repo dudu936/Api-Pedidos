@@ -22,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_product")
-public class Product implements Serializable, Iterable<Category> {
+public class Product implements Serializable, Iterable<Category>, Identifiable{
 	private static final long serialVersionUID = 1L;
 
 	@Id

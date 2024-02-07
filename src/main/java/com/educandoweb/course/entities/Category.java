@@ -15,7 +15,7 @@ import jakarta.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "tb_category")
-public class Category implements Serializable {
+public class Category implements Serializable, Identifiable{
 	private static final long serialVersionUID = 1L;
 
 	@Id

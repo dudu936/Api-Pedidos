@@ -24,7 +24,7 @@ public class ProductService extends DataService<Product, Long> {
 	}
 
 	@Autowired
-	private CategoryServices service;
+	private CategoryService service;
 	@Autowired
 	private ProductValidate validate;
 

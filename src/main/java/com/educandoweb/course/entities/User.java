@@ -19,7 +19,7 @@ import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "tb_user")
-public class User implements Serializable {
+public class User implements Serializable, Identifiable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -50,7 +50,7 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public long getId() {
+	public Long getId() {
 		return id;
 	}
 

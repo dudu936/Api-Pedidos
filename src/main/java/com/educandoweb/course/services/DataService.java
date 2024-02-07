@@ -5,14 +5,17 @@ import java.util.Optional;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Service;
 
+import com.educandoweb.course.entities.Identifiable;
 import com.educandoweb.course.services.exeptions.ConstraintException;
 import com.educandoweb.course.services.exeptions.DatabaseException;
 import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 
 import jakarta.validation.ConstraintViolationException;
 
-public abstract class DataService<T, ID> {
+@Service
+public abstract class DataService<T extends Identifiable, ID> {
 	protected JpaRepository<T, ID> repository;
 	
 	public DataService(JpaRepository<T, ID> repository) {
@@ -43,4 +46,6 @@ public abstract class DataService<T, ID> {
 			throw new DatabaseException("Cannot remove used data.\n" + e.getMessage());
 		}
 	}
+	
+	public abstract T update(ID id, T entity );
 }

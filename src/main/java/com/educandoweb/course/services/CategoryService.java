@@ -6,9 +6,9 @@ import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.repositories.CategoryRepository;
 
 @Service
-public class CategoryServices extends DataService<Category, Long> {
+public class CategoryService extends DataService<Category, Long> {
 	
-	public CategoryServices(CategoryRepository repository) {
+	public CategoryService(CategoryRepository repository) {
 		super(repository);
 	}
 	
