@@ -1,36 +1,15 @@
 package com.educandoweb.course.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.repositories.CategoryRepository;
-import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 
 @Service
-public class CategoryServices {
+public class CategoryServices extends DataService<Category, Long> {
 	
-	@Autowired
-	private CategoryRepository repository;
-	
-	public List<Category> findAll(){
-		return repository.findAll();
-	}
-	
-	public Category findById(Long id) {
-		Optional<Category> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ResourceNotFoundExeption(id));
-	}
-	
-	public Category insert(Category category) {
-		return repository.save(category);
-	}
-	
-	public void remove(Long id) {
-		repository.deleteById(id);
+	public CategoryServices(CategoryRepository repository) {
+		super(repository);
 	}
 	
 	public Category update(Long id, Category category) {

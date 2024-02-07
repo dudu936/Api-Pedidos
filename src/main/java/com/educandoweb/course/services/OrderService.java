@@ -1,27 +1,16 @@
 package com.educandoweb.course.services;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.educandoweb.course.entities.Order;
 import com.educandoweb.course.repositories.OrderRepository;
-import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 
 @Service
-public class OrderService {
-	
-	@Autowired
-	private OrderRepository repository;
+public class OrderService extends DataService<Order, Long> {
 
-	public List<Order> findAll() {
-		return repository.findAll();
+	public OrderService(OrderRepository repository) {
+		super(repository);
+
 	}
-	
-	public Order findById(Long id){
-		Optional<Order> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ResourceNotFoundExeption(id));
-	}
+
 }

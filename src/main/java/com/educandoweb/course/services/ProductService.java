@@ -1,10 +1,6 @@
 package com.educandoweb.course.services;
 
-import java.util.List;
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
@@ -13,7 +9,6 @@ import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
 import com.educandoweb.course.services.exeptions.ConstraintException;
-import com.educandoweb.course.services.exeptions.DatabaseException;
 import com.educandoweb.course.services.exeptions.IllegalArgument;
 import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
 import com.educandoweb.course.services.validate.ProductValidate;
@@ -22,29 +17,23 @@ import jakarta.persistence.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 
 @Service
-public class ProductService {
+public class ProductService extends DataService<Product, Long> {
 
-	@Autowired
-	private ProductRepository repository;
+	public ProductService(ProductRepository repository) {
+		super(repository);
+	}
+
 	@Autowired
 	private CategoryServices service;
 	@Autowired
 	private ProductValidate validate;
 
-	public List<Product> findAll() {
-		return repository.findAll();
-	}
-
-	public Product findById(Long id) {
-		Optional<Product> obj = repository.findById(id);
-		return obj.orElseThrow(() -> new ResourceNotFoundExeption(id));
-	}
-
+	@Override
 	public Product insert(Product product) {
 		try {
 			if (validate.categoryIsValid(product)) {
 				Product entity = addCategories(product);
-				return repository.save(entity);
+				return super.repository.save(entity);
 			} else {
 				throw new ConstraintException("There are categories that do not exist, send a valid category.");
 			}
@@ -53,14 +42,6 @@ public class ProductService {
 					"Required parameters are missing {name, description, price}\n" + e.getMessage());
 		} catch (InvalidDataAccessApiUsageException e) {
 			throw new IllegalArgument();
-		}
-	}
-
-	public void remove(Long id) {
-		try {
-			repository.deleteById(id);
-		} catch (DataIntegrityViolationException e) {
-			throw new DatabaseException("Cannot remove used data.\n" + e.getMessage());
 		}
 	}
 
@@ -75,6 +56,8 @@ public class ProductService {
 		} catch (TransactionSystemException e) {
 			throw new ConstraintException(
 					"Required parameters are missing {name, description, price}\n" + e.getMessage());
+		} catch (InvalidDataAccessApiUsageException e) {
+			throw new IllegalArgument();
 		}
 	}
 
