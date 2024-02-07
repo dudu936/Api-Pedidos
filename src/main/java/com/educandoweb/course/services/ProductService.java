@@ -5,12 +5,12 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.TransactionSystemException;
 
-import com.educandoweb.course.entities.Category;
 import com.educandoweb.course.entities.Product;
 import com.educandoweb.course.repositories.ProductRepository;
 import com.educandoweb.course.services.exeptions.ConstraintException;
 import com.educandoweb.course.services.exeptions.IllegalArgument;
 import com.educandoweb.course.services.exeptions.ResourceNotFoundExeption;
+import com.educandoweb.course.services.validate.ProductUpdater;
 import com.educandoweb.course.services.validate.ProductValidate;
 
 import jakarta.persistence.EntityNotFoundException;
@@ -24,16 +24,16 @@ public class ProductService extends DataService<Product, Long> {
 	}
 
 	@Autowired
-	private CategoryService service;
-	@Autowired
 	private ProductValidate validate;
+	@Autowired
+	private ProductUpdater updater;
 
 	@Override
 	public Product insert(Product product) {
 		try {
 			if (validate.categoryIsValid(product)) {
-				Product entity = addCategories(product);
-				return super.repository.save(entity);
+				product = validate.addValidCategories(product);
+				return super.repository.save(product);
 			} else {
 				throw new ConstraintException("There are categories that do not exist, send a valid category.");
 			}
@@ -48,7 +48,7 @@ public class ProductService extends DataService<Product, Long> {
 	public Product update(Long id, Product product) {
 		try {
 			Product entity = repository.getReferenceById(id);
-			entity = updateProduct(entity, product);
+			entity = updater.updateProduct(entity, product);
 			return repository.save(entity);
 		} catch (EntityNotFoundException e) {
 			throw new ResourceNotFoundExeption(id);
@@ -61,36 +61,4 @@ public class ProductService extends DataService<Product, Long> {
 		}
 	}
 
-	private Product updateProduct(Product entity, Product product) {
-		entity.setName(product.getName());
-		entity.setDescription(product.getDescription());
-		entity.setPrice(product.getPrice());
-		if (product.getImgUrl() != null) {
-			entity.setImgUrl(product.getImgUrl());
-		}
-		if (!product.getCategories().isEmpty()) {
-			try {
-				if (validate.categoryIsValid(product)) {
-					for (Category category : product) {
-						if (!entity.getCategories().contains(category)) {
-							entity.addCategory(category);
-						}
-					}
-				}
-			} catch (NullPointerException e) {
-				throw new ConstraintException(
-						"There are categories that do not exist, send a valid category.\n" + e.getMessage());
-			}
-		}
-		return entity;
-	}
-
-	private Product addCategories(Product product) {
-		Product entity = new Product.Builder().id(product.getId()).name(product.getName())
-				.description(product.getDescription()).price(product.getPrice()).imgUrl(product.getImgUrl()).Build();
-		for (Category category : product) {
-			entity.addCategory(service.findById(category.getId()));
-		}
-		return entity;
-	}
 }
