@@ -14,12 +14,7 @@ public class CategoryService extends DataService<Category, Long> {
 	
 	public Category update(Long id, Category category) {
 		Category entity = repository.getReferenceById(id);
-		entity = updateCategory(entity, category);
-		return repository.save(entity);
-	}
-
-	private Category updateCategory(Category entity, Category category) {
 		entity.setName(category.getName());
-		return entity;
+		return repository.save(entity);
 	}
 }
