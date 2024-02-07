@@ -2,6 +2,7 @@ package com.educandoweb.course.entities;
 
 import java.io.Serializable;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 
@@ -21,7 +22,7 @@ import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "tb_product")
-public class Product implements Serializable {
+public class Product implements Serializable, Iterable<Category> {
 	private static final long serialVersionUID = 1L;
 
 	@Id
@@ -121,7 +122,12 @@ public class Product implements Serializable {
 			this.categories.add(category);
 		}
 	}
-
+	
+	@Override
+	public Iterator<Category> iterator() {
+		return categories.iterator();
+	}
+	
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
@@ -188,5 +194,4 @@ public class Product implements Serializable {
 		}
 
 	}
-
 }
