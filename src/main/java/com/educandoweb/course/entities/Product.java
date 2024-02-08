@@ -1,6 +1,7 @@
 package com.educandoweb.course.entities;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Objects;
@@ -108,19 +109,12 @@ public class Product implements Serializable, Iterable<Category>, Identifiable{
 	@JsonIgnore
 	public Set<Order> getOrders(){
 		Set<Order> orders = new HashSet<>();
-		for(OrderItem order : this.orders) {
-			orders.add(order.getOrder());
-		}
+		this.orders.forEach((order -> orders.add(order.getOrder())));
 		return orders;
 	}
 	
 	public void addCategory(Category... categories) {
-		if(categories.length == 1) {
-			this.categories.add(categories[0]);
-		}
-		for(Category category: categories) {
-			this.categories.add(category);
-		}
+		this.categories.addAll(Arrays.asList(categories));
 	}
 	
 	@Override
