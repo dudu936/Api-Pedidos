@@ -22,9 +22,7 @@ public class Payment implements Serializable, Identifiable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	private Instant moment;
-
 	@OneToOne
 	@MapsId
 	@JsonIgnore

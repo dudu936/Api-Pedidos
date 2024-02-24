@@ -35,7 +35,6 @@ public class User implements Serializable, Identifiable{
 	@NotEmpty
 	@Size(min=4, max=16)
 	private String password;
-	
 	@OneToMany(mappedBy = "client")
 	@JsonIgnore
 	private List<Order> orders = new ArrayList<>();

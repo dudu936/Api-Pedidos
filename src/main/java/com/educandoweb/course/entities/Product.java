@@ -29,7 +29,6 @@ public class Product implements Serializable, Iterable<Category>, Identifiable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
 	@NotEmpty
 	private String name;
 	@NotEmpty
@@ -37,11 +36,9 @@ public class Product implements Serializable, Iterable<Category>, Identifiable{
 	@NotNull
 	private Double price;
 	private String imgUrl;
-	
 	@ManyToMany
 	@JoinTable(name = "tb_product_category", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
 	private Set<Category> categories = new HashSet<>();
-	
 	@OneToMany(mappedBy = "id.product")
 	private Set<OrderItem> orders = new HashSet<>();
 
